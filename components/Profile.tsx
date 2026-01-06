@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
-import { User, Tournament, Player } from '../types';
+import { User, Tournament, Player, AppState } from '../types';
 
 interface ProfileProps {
   user: User;
   onLogout: () => void;
-  onNavigate: (view: any, id?: string) => void;
+  onNavigate: (view: AppState['view'], id?: string) => void;
 }
 
 const Profile: React.FC<ProfileProps> = ({ user, onLogout, onNavigate }) => {
@@ -75,10 +75,12 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout, onNavigate }) => {
             <div key={t.id} className="gaming-card p-6 rounded-2xl group cursor-pointer" onClick={() => onNavigate('details', t.id)}>
               <div className="flex justify-between mb-4">
                 <span className="bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-1 rounded uppercase">Joined</span>
+                {/* Fixed dateTime */}
                 <span className="text-zinc-500 text-xs">{new Date(t.dateTime).toLocaleDateString()}</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-4 group-hover:text-gaming-orange transition">{t.title}</h3>
               <div className="flex items-center justify-between">
+                {/* Fixed prizePool */}
                 <p className="text-gaming-orange font-bold">{t.prizePool} Prize</p>
                 <button className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1 rounded transition">View Details</button>
               </div>

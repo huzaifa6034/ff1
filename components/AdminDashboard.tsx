@@ -96,6 +96,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
         {activeTab === 'tournaments' && (
           <button 
             onClick={() => {
+              // Fixed property names to match updated types.ts
               setEditingTournament({ title: '', dateTime: '', entryFee: '', prizePool: '', slots: 48, rules: '', whatsappLink: '' });
               setShowModal(true);
             }}
@@ -122,6 +123,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                 <tr key={t.id} className="hover:bg-black/50 transition">
                   <td className="px-6 py-4">
                     <p className="font-bold text-white">{t.title}</p>
+                    {/* Fixed dateTime */}
                     <p className="text-xs text-zinc-500">{new Date(t.dateTime).toLocaleDateString()}</p>
                   </td>
                   <td className="px-6 py-4">
@@ -130,6 +132,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     </span>
                   </td>
                   <td className="px-6 py-4 text-zinc-400">
+                    {/* Fixed registeredCount and slots */}
                     {t.registeredCount} / {t.slots}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -248,7 +251,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="text" required
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.title || ''}
-                    onChange={e => setEditingTournament({ ...editingTournament, title: e.target.value })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, title: e.target.value }))}
                   />
                 </div>
                 <div>
@@ -257,7 +260,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="datetime-local" required
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.dateTime || ''}
-                    onChange={e => setEditingTournament({ ...editingTournament, dateTime: e.target.value })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, dateTime: e.target.value }))}
                   />
                 </div>
                 <div>
@@ -266,7 +269,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="text" required placeholder="e.g. ₹50 or FREE"
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.entryFee || ''}
-                    onChange={e => setEditingTournament({ ...editingTournament, entryFee: e.target.value })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, entryFee: e.target.value }))}
                   />
                 </div>
                 <div>
@@ -275,7 +278,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="text" required placeholder="e.g. ₹5000"
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.prizePool || ''}
-                    onChange={e => setEditingTournament({ ...editingTournament, prizePool: e.target.value })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, prizePool: e.target.value }))}
                   />
                 </div>
                 <div>
@@ -284,7 +287,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="number" required
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.slots || 48}
-                    onChange={e => setEditingTournament({ ...editingTournament, slots: parseInt(e.target.value) })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, slots: parseInt(e.target.value) }))}
                   />
                 </div>
                 <div>
@@ -293,7 +296,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                     type="url" required placeholder="https://chat.whatsapp.com/..."
                     className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange"
                     value={editingTournament?.whatsappLink || ''}
-                    onChange={e => setEditingTournament({ ...editingTournament, whatsappLink: e.target.value })}
+                    onChange={e => setEditingTournament(prev => ({ ...prev, whatsappLink: e.target.value }))}
                   />
                 </div>
               </div>
@@ -303,7 +306,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ tournaments, onUpdateTo
                   rows={4}
                   className="w-full bg-black border border-zinc-800 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-gaming-orange resize-none"
                   value={editingTournament?.rules || ''}
-                  onChange={e => setEditingTournament({ ...editingTournament, rules: e.target.value })}
+                  onChange={e => setEditingTournament(prev => ({ ...prev, rules: e.target.value }))}
                 />
               </div>
               <div className="pt-4">

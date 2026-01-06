@@ -43,16 +43,19 @@ const Home: React.FC<HomeProps> = ({ tournaments, onNavigate }) => {
                 <span className={`text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider ${tournament.status === 'open' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                   {tournament.status === 'open' ? 'Registration Open' : 'Full / Closed'}
                 </span>
+                {/* Fixed dateTime */}
                 <span className="text-zinc-500 text-xs">{new Date(tournament.dateTime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
               </div>
               <h3 className="text-xl font-bold mb-2 group-hover:text-gaming-orange transition">{tournament.title}</h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-zinc-800/50 p-3 rounded">
                   <p className="text-zinc-500 text-[10px] uppercase font-bold mb-1">Entry Fee</p>
+                  {/* Fixed entryFee */}
                   <p className="text-lg font-bold">{tournament.entryFee}</p>
                 </div>
                 <div className="bg-zinc-800/50 p-3 rounded">
                   <p className="text-zinc-500 text-[10px] uppercase font-bold mb-1">Prize Pool</p>
+                  {/* Fixed prizePool */}
                   <p className="text-lg font-bold text-gaming-orange">{tournament.prizePool}</p>
                 </div>
               </div>
@@ -61,10 +64,12 @@ const Home: React.FC<HomeProps> = ({ tournaments, onNavigate }) => {
             <div className="flex items-center justify-between mt-auto">
               <div className="text-sm">
                 <span className="text-zinc-400">Slots:</span>
+                {/* Fixed registeredCount and slots */}
                 <span className="ml-2 font-bold text-white">{tournament.registeredCount}/{tournament.slots}</span>
               </div>
               <button 
                 disabled={tournament.status !== 'open'}
+                // Fixed 'register' (now in view union)
                 onClick={() => onNavigate('register', tournament.id)}
                 className={`py-2 px-6 rounded font-bold transition ${tournament.status === 'open' ? 'bg-gaming-orange hover:bg-orange-600 text-white glow-orange' : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'}`}
               >

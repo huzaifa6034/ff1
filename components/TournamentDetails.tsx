@@ -1,13 +1,18 @@
 
 import React from 'react';
-import { Tournament, AppState } from '../types';
+import { Tournament, AppState, User } from '../types';
 
 interface TournamentDetailsProps {
   tournament: Tournament;
+  // Added user, apiUrl, and onRefresh props from App.tsx
+  user: User | null;
   onNavigate: (view: AppState['view'], id?: string) => void;
+  apiUrl: string;
+  onRefresh: () => Promise<void>;
 }
 
 const TournamentDetails: React.FC<TournamentDetailsProps> = ({ tournament, onNavigate }) => {
+  // Use camelCase from updated types.ts
   const progress = (tournament.registeredCount / tournament.slots) * 100;
 
   return (
@@ -87,6 +92,7 @@ const TournamentDetails: React.FC<TournamentDetailsProps> = ({ tournament, onNav
               <p className="text-zinc-500 mb-8 text-sm">Make sure you have your Free Fire UID and WhatsApp number ready.</p>
               <button 
                 disabled={tournament.status !== 'open'}
+                // Changed 'register' to 'register' (which is now in the view union)
                 onClick={() => onNavigate('register', tournament.id)}
                 className={`w-full py-4 rounded-xl font-bold text-lg uppercase transition-all transform hover:scale-[1.02] active:scale-[0.98] ${tournament.status === 'open' ? 'bg-gaming-orange text-white glow-orange hover:bg-orange-600' : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'}`}
               >

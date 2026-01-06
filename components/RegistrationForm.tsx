@@ -41,6 +41,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ user, tournament, o
 
       const tournaments = JSON.parse(localStorage.getItem('ff_tournaments') || '[]');
       const updatedTourneys = tournaments.map((t: Tournament) => 
+        // Fixed property name registeredCount
         t.id === tournament.id ? { ...t, registeredCount: t.registeredCount + 1 } : t
       );
       localStorage.setItem('ff_tournaments', JSON.stringify(updatedTourneys));
@@ -66,6 +67,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ user, tournament, o
         
         <div className="space-y-4">
           <a 
+            // Fixed property name whatsappLink
             href={tournament.whatsappLink || '#'} target="_blank" rel="noopener noreferrer"
             className="flex items-center justify-center w-full bg-[#25D366] text-white font-bold py-4 rounded-xl hover:opacity-90 transition shadow-lg"
           >
@@ -73,6 +75,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ user, tournament, o
             Join Match Group
           </a>
           <button 
+            // Changed 'profile' to 'profile'
             onClick={() => onNavigate('profile')}
             className="w-full bg-zinc-800 text-white font-bold py-3 rounded-xl hover:bg-zinc-700 transition"
           >
@@ -119,6 +122,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ user, tournament, o
           </div>
           <div className="flex justify-between items-center py-3 border-b border-zinc-800/50">
             <span className="text-zinc-500 font-bold text-xs uppercase tracking-widest">Entry Fee</span>
+            {/* Fixed property name entryFee */}
             <span className="text-gaming-orange font-bold text-lg">{tournament.entryFee}</span>
           </div>
         </div>

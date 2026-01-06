@@ -1,13 +1,17 @@
 
 import React, { useState } from 'react';
-import { User } from '../types';
+import { User, Admin } from '../types';
 
 interface AuthProps {
-  onAuthSuccess: (user: User) => void;
+  mode: 'login' | 'signup';
+  isAdmin?: boolean;
+  onSuccess: (user: User | Admin) => void;
+  onToggleMode?: () => void;
+  apiUrl: string;
 }
 
-const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+const Auth: React.FC<AuthProps> = ({ mode: initialMode, isAdmin, onSuccess, onToggleMode, apiUrl }) => {
+  const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -19,44 +23,37 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
     whatsapp: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      const users: any[] = JSON.parse(localStorage.getItem('ff_users') || '[]');
+    try {
+      const endpoint = mode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
+      const payload = mode === 'signup' 
+        ? { ...formData }
+        : isAdmin 
+          ? { username: formData.email, password: formData.password, type: 'admin' }
+          : { email: formData.email, password: formData.password, type: 'user' };
 
-      if (mode === 'signup') {
-        if (users.find(u => u.email === formData.email)) {
-          setError('Email already exists');
-          setLoading(false);
-          return;
-        }
+      const response = await fetch(`${apiUrl}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-        const newUser: User = {
-          id: Math.random().toString(36).substr(2, 9),
-          name: formData.name,
-          email: formData.email,
-          ff_uid: formData.ff_uid,
-          whatsapp: formData.whatsapp
-        };
-        
-        users.push({ ...newUser, password: formData.password });
-        localStorage.setItem('ff_users', JSON.stringify(users));
-        onAuthSuccess(newUser);
-      } else {
-        const found = users.find(u => u.email === formData.email && u.password === formData.password);
-        if (found) {
-          const { password, ...userWithoutPassword } = found;
-          onAuthSuccess(userWithoutPassword);
-        } else {
-          setError('Invalid credentials');
-        }
+      if (!response.ok) {
+        const msg = await response.text();
+        throw new Error(msg || 'Authentication failed');
       }
+
+      const data = await response.json();
+      onSuccess(data.user);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-    }, 1200);
+    }
   };
 
   return (
@@ -66,10 +63,10 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
         
         <div className="text-center mb-8 relative z-10">
           <h2 className="text-4xl font-oswald font-bold mb-2 uppercase tracking-tighter">
-            {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+            {isAdmin ? 'Admin Portal' : (mode === 'login' ? 'Welcome Back' : 'Create Account')}
           </h2>
           <p className="text-zinc-500">
-            {mode === 'login' ? 'Login to join tournaments' : 'Sign up to start your journey'}
+            {isAdmin ? 'Authorized access only' : (mode === 'login' ? 'Login to join tournaments' : 'Sign up to start your journey')}
           </p>
         </div>
 
@@ -81,7 +78,7 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
-          {mode === 'signup' && (
+          {mode === 'signup' && !isAdmin && (
             <div>
               <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 ml-1">Full Name</label>
               <input 
@@ -93,15 +90,15 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
           )}
           
           <div>
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 ml-1">Email Address</label>
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 ml-1">{isAdmin ? 'Username' : 'Email Address'}</label>
             <input 
-              type="email" required placeholder="player@example.com"
+              type={isAdmin ? "text" : "email"} required placeholder={isAdmin ? "admin" : "player@example.com"}
               className="w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-gaming-orange text-white transition"
               value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
-          {mode === 'signup' && (
+          {mode === 'signup' && !isAdmin && (
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 ml-1">FF UID</label>
@@ -138,20 +135,26 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
             {loading ? (
               <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             ) : (
-              mode === 'login' ? 'Login Now' : 'Create Account'
+              isAdmin ? 'Admin Sign In' : (mode === 'login' ? 'Login Now' : 'Create Account')
             )}
           </button>
         </form>
 
-        <div className="mt-8 text-center text-sm">
-          <span className="text-zinc-500">{mode === 'login' ? "Don't have an account?" : "Already have an account?"}</span>
-          <button 
-            onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-            className="ml-2 text-gaming-orange font-bold hover:underline"
-          >
-            {mode === 'login' ? 'Sign Up' : 'Log In'}
-          </button>
-        </div>
+        {!isAdmin && (
+          <div className="mt-8 text-center text-sm">
+            <span className="text-zinc-500">{mode === 'login' ? "Don't have an account?" : "Already have an account?"}</span>
+            <button 
+              onClick={() => {
+                const newMode = mode === 'login' ? 'signup' : 'login';
+                setMode(newMode);
+                if (onToggleMode) onToggleMode();
+              }}
+              className="ml-2 text-gaming-orange font-bold hover:underline"
+            >
+              {mode === 'login' ? 'Sign Up' : 'Log In'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

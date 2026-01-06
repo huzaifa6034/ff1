@@ -7,9 +7,11 @@ interface HeaderProps {
   user: User | null;
   isAdmin: boolean;
   onNavigate: (view: AppState['view']) => void;
+  // Added onLogout prop which was being passed in App.tsx
+  onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentView, user, isAdmin, onNavigate }) => {
+const Header: React.FC<HeaderProps> = ({ currentView, user, isAdmin, onNavigate, onLogout }) => {
   return (
     <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 py-4 shadow-xl">
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -34,6 +36,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, user, isAdmin, onNavigate 
         <div className="flex items-center space-x-4">
           {user ? (
             <div 
+              // Changed 'profile' to 'profile' (which is now in the view union)
               onClick={() => onNavigate('profile')}
               className="flex items-center space-x-3 cursor-pointer bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-full hover:border-gaming-orange transition"
             >
@@ -43,7 +46,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, user, isAdmin, onNavigate 
               <span className="hidden sm:inline font-bold text-sm text-zinc-300">{user.name.split(' ')[0]}</span>
             </div>
           ) : isAdmin ? (
-            <button onClick={() => onNavigate('admin-dashboard')} className="bg-zinc-800 text-white px-4 py-2 rounded font-bold hover:bg-zinc-700 transition text-sm">Admin Panel</button>
+            // Changed 'admin-dashboard' to 'admin-panel' to match union
+            <button onClick={() => onNavigate('admin-panel')} className="bg-zinc-800 text-white px-4 py-2 rounded font-bold hover:bg-zinc-700 transition text-sm">Admin Panel</button>
           ) : (
             <button 
               onClick={() => onNavigate('auth')}

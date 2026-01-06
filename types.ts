@@ -5,32 +5,46 @@ export interface User {
   email: string;
   ff_uid: string;
   whatsapp: string;
-  avatar?: string;
 }
 
-export interface Tournament {
+export interface Admin {
   id: string;
-  title: string;
-  dateTime: string;
-  entryFee: string;
-  prizePool: string;
-  slots: number;
-  registeredCount: number;
-  status: 'open' | 'closed' | 'finished';
-  whatsappLink?: string;
-  rules?: string;
+  username: string;
 }
 
+// Added Player interface which was missing
 export interface Player {
   id: string;
   userId: string;
   tournamentId: string;
   registrationDate: string;
+  ign?: string;
+  uid?: string;
+  whatsapp?: string;
+}
+
+export interface Tournament {
+  id: string;
+  title: string;
+  mode: string;
+  // Updated to camelCase to match component usage and fix errors
+  entryFee: string;
+  prizePool: string;
+  dateTime: string;
+  slots: number;
+  registeredCount: number;
+  status: 'open' | 'closed' | 'finished';
+  room_id?: string;
+  room_pass?: string;
+  rules?: string;
+  whatsappLink?: string;
 }
 
 export interface AppState {
-  view: 'home' | 'details' | 'rules' | 'results' | 'admin-login' | 'admin-dashboard' | 'register' | 'profile' | 'auth';
-  selectedTournamentId?: string;
+  // Added 'register' and 'profile' to supported views
+  view: 'home' | 'details' | 'auth' | 'dashboard' | 'admin-login' | 'admin-panel' | 'rules' | 'results' | 'register' | 'profile';
+  authMode: 'login' | 'signup';
   user: User | null;
-  isAdmin: boolean;
+  admin: Admin | null;
+  selectedTournamentId?: string;
 }

@@ -47,6 +47,7 @@ export default {
     try {
       // --- PUBLIC: TOURNAMENTS ---
       if (url.pathname === "/api/tournaments" && method === "GET") {
+        // Ensure we fetch using camelCase if the D1 tables were created that way
         const { results } = await env.DB.prepare("SELECT * FROM tournaments ORDER BY dateTime ASC").all();
         return Response.json(results, { headers: CORS_HEADERS });
       }
@@ -122,6 +123,7 @@ export default {
       if (url.pathname === "/api/admin/tournament/create" && method === "POST") {
         const data = await request.json();
         const id = crypto.randomUUID();
+        // Matching column names from clean SQL schema
         await env.DB.prepare(
           "INSERT INTO tournaments (id, title, mode, entryFee, prizePool, dateTime, slots, rules) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         ).bind(id, data.title, data.mode, data.entryFee, data.prizePool, data.startTime, data.maxSlots, data.rules).run();

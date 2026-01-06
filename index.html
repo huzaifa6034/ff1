@@ -12,6 +12,7 @@
         font-family: 'Inter', sans-serif;
         background-color: #0a0a0a;
         color: #e5e5e5;
+        margin: 0;
       }
       .font-oswald {
         font-family: 'Oswald', sans-serif;
@@ -38,17 +39,20 @@
         box-shadow: 0 0 15px rgba(255, 76, 0, 0.3);
       }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

@@ -1,4 +1,13 @@
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  ff_uid: string;
+  whatsapp: string;
+  avatar?: string;
+}
+
 export interface Tournament {
   id: string;
   title: string;
@@ -14,15 +23,14 @@ export interface Tournament {
 
 export interface Player {
   id: string;
+  userId: string;
   tournamentId: string;
-  ign: string;
-  uid: string;
-  whatsapp: string;
   registrationDate: string;
 }
 
 export interface AppState {
-  view: 'home' | 'details' | 'rules' | 'results' | 'admin-login' | 'admin-dashboard' | 'register';
+  view: 'home' | 'details' | 'rules' | 'results' | 'admin-login' | 'admin-dashboard' | 'register' | 'profile' | 'auth';
   selectedTournamentId?: string;
+  user: User | null;
   isAdmin: boolean;
 }

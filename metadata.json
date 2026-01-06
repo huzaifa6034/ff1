@@ -1,5 +1,5 @@
 {
-  "name": "Copy of FF Tourney Elite",
-  "description": "A comprehensive Free Fire tournament management platform with player registration, real-time updates, and a powerful admin dashboard.",
+  "name": "FF Tourney Elite",
+  "description": "Professional Free Fire tournament management platform optimized for Cloudflare D1 and Workers.",
   "requestFramePermissions": []
 }

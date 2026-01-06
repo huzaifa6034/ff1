@@ -53,4 +53,52 @@ const TournamentDetails: React.FC<TournamentDetailsProps> = ({ tournament, onNav
           </div>
 
           <div className="mb-10">
-            <
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-bold text-white uppercase font-oswald">Registration Status</h3>
+              <span className="text-zinc-400 font-bold">{tournament.registeredCount} / {tournament.slots} Slots filled</span>
+            </div>
+            <div className="w-full bg-zinc-800 h-3 rounded-full overflow-hidden">
+              <div 
+                className="bg-gaming-orange h-full rounded-full transition-all duration-1000 ease-out glow-orange"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-xl font-oswald font-bold text-white mb-4 uppercase border-b border-zinc-800 pb-2">Tournament Rules</h3>
+              <div className="prose prose-invert max-w-none text-zinc-400 text-sm leading-relaxed">
+                {tournament.rules ? (
+                  <p className="whitespace-pre-line">{tournament.rules}</p>
+                ) : (
+                  <p>Standard survival rules apply. No emulators allowed. Minimum level 40 required for entry. All players must join the WhatsApp group for match updates.</p>
+                )}
+                <ul className="mt-4 space-y-2 list-disc pl-5">
+                  <li>Map: Bermuda (Classic)</li>
+                  <li>Mode: Solo/Squad</li>
+                  <li>No Teaming</li>
+                  <li>Recording mandatory for verification</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center bg-zinc-800/20 border border-zinc-800 p-8 rounded-3xl text-center">
+              <h3 className="text-2xl font-oswald font-bold text-white mb-2 uppercase">Ready to Play?</h3>
+              <p className="text-zinc-500 mb-8 text-sm">Make sure you have your Free Fire UID and WhatsApp number ready.</p>
+              <button 
+                disabled={tournament.status !== 'open'}
+                onClick={() => onNavigate('register', tournament.id)}
+                className={`w-full py-4 rounded-xl font-bold text-lg uppercase transition-all transform hover:scale-[1.02] active:scale-[0.98] ${tournament.status === 'open' ? 'bg-gaming-orange text-white glow-orange hover:bg-orange-600' : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'}`}
+              >
+                {tournament.status === 'open' ? 'Register Now' : 'Slots Full'}
+              </button>
+              <p className="mt-4 text-[10px] text-zinc-600 uppercase tracking-widest font-bold">Secure Payment via UPI/WhatsApp</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TournamentDetails;
